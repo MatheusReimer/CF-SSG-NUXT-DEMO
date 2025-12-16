@@ -1,0 +1,2 @@
+name = "cf-ssg-nuxt-demo"
+pages_build_output_dir = "www"

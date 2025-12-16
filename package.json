@@ -1,0 +1,20 @@
+{
+  "name": "nuxt-incremental-demo",
+  "version": "1.0.0",
+  "description": "Nuxt 3 incremental static generation demo",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "nuxt dev",
+    "build": "nuxt build",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postgenerate": "node scripts/merge-builds.js"
+  },
+  "dependencies": {
+    "nuxt": "^4.2.2"
+  },
+  "devDependencies": {
+    "@types/node": "^25.0.2"
+  }
+}

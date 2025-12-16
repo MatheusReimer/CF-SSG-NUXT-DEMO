@@ -9,7 +9,7 @@
     "build": "nuxt build",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postgenerate": "node scripts/merge-builds.js && rm -rf .output/server"
+    "postgenerate": "node scripts/merge-builds.js && rm -rf .output/server .wrangler"
   },
   "dependencies": {
     "nuxt": "^4.2.2"

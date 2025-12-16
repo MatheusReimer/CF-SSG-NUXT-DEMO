@@ -1,2 +1,3 @@
-name = "cf-ssg-nuxt-demo"
+name = "cf-ssg-demo"
 pages_build_output_dir = "www"
+compatibility_date = "2024-11-01"

@@ -135,7 +135,23 @@
 </template>
 
 <script setup lang="ts">
-const { data: posts } = await useFetch<any>('/api/posts')
+// CHANGED: Use useAsyncData instead of useFetch
+const { data: posts } = await useAsyncData('posts', async () => {
+  const config = useRuntimeConfig()
+  
+  try {
+    const response = await $fetch(config.public.cmsApiUrl || config.cmsApiUrl, {
+      headers: {
+        'X-Master-Key': config.public.cmsApiKey || config.cmsApiKey || ''
+      }
+    })
+    const data = response as any
+    return data.record?.posts || data.posts || data
+  } catch (error) {
+    console.error('Failed to fetch posts:', error)
+    return []
+  }
+})
 
 function formatDate(dateString: string) {
   return new Date(dateString).toLocaleDateString('en-US', {

@@ -3,7 +3,10 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
 
   ssr: true,
-
+  runtimeConfig: {
+    cmsApiUrl: process.env.CMS_API_URL,
+    cmsApiKey: process.env.CMS_API_KEY,
+  },
   nitro: {
     preset: 'static',
     prerender: {

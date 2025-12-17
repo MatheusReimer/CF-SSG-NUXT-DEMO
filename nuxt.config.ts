@@ -24,16 +24,22 @@ export default defineNuxtConfig({
         console.log('[Incremental Build] Generating routes:', changed)
         changed.forEach(r => routes.add(r))
       } else {
-        // Full build - all post slugs
-        const slugs = [
-          'data-center-cooling-solutions',
-          'cabinet-selection-guide',
-          'power-distribution-best-practices',
-          'cable-management-strategies',
-          'edge-computing-infrastructure'
-        ]
-        console.log('[Full Build] Generating routes:', slugs)
-        slugs.forEach(slug => routes.add(`/posts/${slug}`))
+        // Full build - fetch slugs from CMS
+        try {
+          const response = await fetch(process.env.CMS_API_URL!, {
+            headers: {
+              'X-Master-Key': process.env.CMS_API_KEY || ''
+            }
+          })
+          const data = await response.json()
+          const posts = data.record?.posts || data.posts || data
+          
+          const slugs = posts.map((p: any) => p.slug)
+          console.log('[Full Build] Generating routes from CMS:', slugs)
+          slugs.forEach((slug: string) => routes.add(`/posts/${slug}`))
+        } catch (error) {
+          console.error('Failed to fetch posts from CMS:', error)
+        }
       }
     },
   },

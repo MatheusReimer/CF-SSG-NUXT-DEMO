@@ -2,7 +2,8 @@ export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
 
-  // Force static preset - no worker generation
+  ssr: true,
+
   nitro: {
     preset: 'static',
     prerender: {
@@ -20,20 +21,11 @@ export default defineNuxtConfig({
         console.log('[Incremental Build] Generating routes:', changed)
         changed.forEach(r => routes.add(r))
       } else {
-        const dates = getLastNDays(10)
-        console.log('[Full Build] Generating routes for dates:', dates)
-        dates.forEach(date => routes.add(`/apod/${date}`))
+        // Use the same data as our API
+        const slugs = ['hello-world', 'nuxt-is-awesome', 'incremental-builds']
+        console.log('[Full Build] Generating routes:', slugs)
+        slugs.forEach(slug => routes.add(`/posts/${slug}`))
       }
     },
   },
 })
-
-function getLastNDays(n: number): string[] {
-  const dates: string[] = []
-  for (let i = 0; i < n; i++) {
-    const date = new Date()
-    date.setDate(date.getDate() - i)
-    dates.push(date.toISOString().split('T')[0])
-  }
-  return dates
-}

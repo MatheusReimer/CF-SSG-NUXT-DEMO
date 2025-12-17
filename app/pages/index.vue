@@ -1,33 +1,19 @@
 <template>
   <div class="container">
-    <h1>🚀 NASA Astronomy Picture of the Day</h1>
-    <p>Incremental Static Generation Demo</p>
+    <h1>📝 My Static Blog</h1>
+    <p>Built with incremental static generation</p>
 
-    <h2>Recent Images</h2>
+    <h2>Posts</h2>
     <ul>
-      <li v-for="date in dates" :key="date">
-        <NuxtLink :to="`/apod/${date}`">{{ date }}</NuxtLink>
+      <li v-for="post in posts" :key="post.slug">
+        <NuxtLink :to="`/posts/${post.slug}`">{{ post.title }}</NuxtLink>
       </li>
     </ul>
-
-    <h2>Test Commands</h2>
-    <pre>
-# Full build (last 10 days)
-npm run generate
-
-# Incremental build (add a specific date)
-$env:INCREMENTAL_BUILD="true"; $env:CHANGED_ROUTES="/apod/2024-01-15"; npm run generate
-    </pre>
   </div>
 </template>
 
 <script setup lang="ts">
-// Generate last 10 days for the index
-const dates = Array.from({ length: 10 }, (_, i) => {
-  const date = new Date()
-  date.setDate(date.getDate() - i)
-  return date.toISOString().split('T')[0]
-})
+const { data: posts } = await useFetch<any>('/api/posts')
 </script>
 
 <style scoped>
@@ -37,12 +23,6 @@ const dates = Array.from({ length: 10 }, (_, i) => {
   padding: 2rem;
   font-family: system-ui, sans-serif;
 }
-h1 { color: #0b3d91; }
-a { color: #fc3d21; }
-pre {
-  background: #f1f1f1;
-  padding: 1rem;
-  overflow-x: auto;
-  font-size: 0.85em;
-}
+h1 { color: #00dc82; }
+a { color: #00dc82; }
 </style>

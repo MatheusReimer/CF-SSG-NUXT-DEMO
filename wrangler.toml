@@ -1,3 +1,6 @@
 name = "cf-ssg-demo"
 pages_build_output_dir = "www"
 compatibility_date = "2024-11-01"
+[[r2_buckets]]
+binding = "BUILDS"
+bucket_name = "ssg-test-demo-nuxt-builds"

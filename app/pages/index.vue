@@ -135,10 +135,10 @@
 </template>
 
 <script setup lang="ts">
-// CHANGED: Use useAsyncData instead of useFetch
-const { data: posts } = await useAsyncData('posts', async () => {
+// Use the same shared key as post pages!
+const { data: posts } = await useAsyncData('all-posts', async () => {
   const config = useRuntimeConfig()
-   
+  
   try {
     const response = await $fetch(config.public.cmsApiUrl || config.cmsApiUrl, {
       headers: {

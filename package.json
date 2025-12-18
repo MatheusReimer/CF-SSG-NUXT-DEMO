@@ -8,6 +8,8 @@
     "dev": "nuxt dev",
     "build": "nuxt build",
     "generate": "nuxt generate",
+    "generate-not-incremental": "cross-env INCREMENTAL_BUILD=false nuxt generate",
+
     "preview": "nuxt preview",
     "postgenerate": "node scripts/merge-builds.js && rm -rf .output/server .wrangler .output/_nuxt"
   },

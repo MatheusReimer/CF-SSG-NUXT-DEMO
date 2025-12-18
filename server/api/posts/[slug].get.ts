@@ -1,7 +1,6 @@
 // server/api/posts/[slug].get.ts
 export default defineEventHandler(async (event) => {
   const slug = getRouterParam(event, 'slug')
-
   const config = useRuntimeConfig()
 
   const response = await fetch(config.cmsApiUrl, {
@@ -18,5 +17,9 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 404, message: 'Post not found' })
   }
 
-  return post
+  // Add build timestamp to the response
+  return {
+    ...post,
+    generatedAt: new Date().toISOString()
+  }
 })

@@ -11,7 +11,7 @@ export default defineNuxtConfig({
     preset: 'static',
     prerender: {
       crawlLinks: false,
-      routes: ['/'],
+      routes: process.env.INCREMENTAL_BUILD === 'true' ? [] : ['/'],
     },
   },
 
@@ -33,7 +33,7 @@ export default defineNuxtConfig({
           })
           const data = await response.json()
           const posts = data.record?.posts || data.posts || data
-          
+
           const slugs = posts.map((p: any) => p.slug)
           console.log('[Full Build] Generating routes from CMS:', slugs)
           slugs.forEach((slug: string) => routes.add(`/posts/${slug}`))

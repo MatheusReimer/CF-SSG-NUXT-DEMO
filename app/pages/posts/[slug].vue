@@ -1,3 +1,45 @@
+<script setup lang="ts">
+const route = useRoute()
+const slug = route.params.slug as string
+
+const { data: post } = await useAsyncData(`post-${slug}`, async () => {
+  const config = useRuntimeConfig()
+
+  const response = await $fetch(config.cmsApiUrl, {
+    headers: { 'X-Master-Key': config.cmsApiKey || '' }
+  })
+
+  const posts = response.record?.posts || response.posts || response
+  const found = posts.find((p: any) => p.slug === slug)
+
+  return found
+    ? {
+        ...found,
+        generatedAt: new Date().toISOString()
+      }
+    : null
+})
+
+function formatContent(content: string) {
+  return content
+    .split('\n\n')
+    .map(para => `<p>${para.replace(/\n/g, '<br>')}</p>`)
+    .join('')
+}
+
+watchEffect(() => {
+  if (!post.value) return
+
+  useHead({
+    title: `${post.value.title} | CPI Resource Center`,
+    meta: [
+      { name: 'description', content: post.value.excerpt }
+    ]
+  })
+})
+</script>
+
+
 <template>
   <div class="page">
     <!-- Header -->
@@ -39,7 +81,7 @@
               </div>
               <div>
                 <span class="author-name">{{ post.author }}</span>
-                <span class="publish-date">{{ formatDate(post.publishedAt) }}</span>
+                <span class="publish-date">{{ post.publishedAt }}</span>
               </div>
             </div>
           </div>
@@ -74,7 +116,7 @@
           <div class="sidebar-card generated-info">
             <span class="label">Static Generation</span>
             <p>This page was pre-rendered at build time:</p>
-            <code>{{ generatedAt }}</code>
+            <code>{{ post.generatedAt }}</code>
           </div>
         </aside>
       </div>
@@ -100,39 +142,6 @@
   </div>
 </template>
 
-<script setup lang="ts">
-const route = useRoute()
-const slug = route.params.slug as string
-
-const generatedAt = useState('generatedAt', () => new Date().toISOString())
-
-const { data: post } = await useFetch<any>(`/api/posts/${slug}`)
-
-function formatDate(dateString: string) {
-  return new Date(dateString).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  })
-}
-
-function formatContent(content: string) {
-  // Convert line breaks to paragraphs
-  return content
-    .split('\n\n')
-    .map(para => `<p>${para.replace(/\n/g, '<br>')}</p>`)
-    .join('')
-}
-
-if (post.value) {
-  useHead({
-    title: `${post.value.title} | CPI Resource Center`,
-    meta: [
-      { name: 'description', content: post.value.excerpt }
-    ]
-  })
-}
-</script>
 
 <style scoped>
 /* Reset & Base */
